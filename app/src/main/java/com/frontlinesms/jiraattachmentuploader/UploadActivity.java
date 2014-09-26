@@ -18,12 +18,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.apache.http.HttpResponse;
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
+
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.mime.HttpMultipartMode;
@@ -41,6 +46,8 @@ public class UploadActivity extends Activity {
     private Button uploadButton;
     private ImageView imagePreview;
     private TextView clickToChooseView;
+    private EditText ticketNumberInput;
+    private Uri fileUri;
     private static final int RESULT_SETTINGS = 1;
     SharedPreferences prefs;
 
@@ -50,6 +57,7 @@ public class UploadActivity extends Activity {
         setContentView(R.layout.activity_upload);
         uploadButton = (Button) findViewById(R.id.uploadButton);
         imagePreview = (ImageView) findViewById(R.id.imagePreview);
+        ticketNumberInput = (EditText) findViewById(R.id.ticketNumberInput);
 
         clickToChooseView = (TextView) findViewById(R.id.uploadTrigger);
         clickToChooseView.setOnClickListener(new View.OnClickListener() {
@@ -61,6 +69,13 @@ public class UploadActivity extends Activity {
                 );
 
                 startActivityForResult(intent, REQUEST_LOAD_IMAGE);
+            };
+        });
+
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadAttachment(fileUri);
             };
         });
 
@@ -111,29 +126,30 @@ public class UploadActivity extends Activity {
         }
     }
 
-    private HttpResponse uploadAttachment(Uri fileUri){
-        HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("LINK TO SERVER");
+    private void uploadAttachment(Uri fileUri){
+        try {
+            Context context = getApplicationContext();
+            prefs = PreferenceManager.getDefaultSharedPreferences(context);
+            String url = prefs.getString("jira_url","");
+            String username= prefs.getString("jira_username", "");
+            String password = prefs.getString("jira_password", "");
 
-        MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
-        if (filePath !=null) {
-            File file = new File(filePath);
-            Log.d("EDIT USER PROFILE", "UPLOAD: file length = " + file.length());
-            Log.d("EDIT USER PROFILE", "UPLOAD: file exist = " + file.exists());
-            mpEntity.addPart("avatar", new FileBody(file, "application/octet"));
 
-            httppost.setEntity(mpEntity);
-            try {
-                HttpResponse response = httpclient.execute(httppost);
-                return response;
-            }catch(IOException ex){
-                Log.e("UPLOAD_ERROR", ex.getMessage(), ex);
-            }
+            url += ("rest/api/2/issue/"+ticketNumberInput.getText()+"/attachments");
+
+            HttpResponse<JsonNode> jsonResponse = Unirest.post("http://httpbin.org/post")
+                    .header("X-Atlassian-Token", "nocheck")
+                    .basicAuth(username, password)
+                    .field("file", new File(fileUri.getPath()))
+                    .asJson();
+        }catch (UnirestException ex){
+            Log.e("UPLOAD_ERR", ex.getMessage());
         }
-        return null;
+        //return null;
     }
 
     private void updateImagePreview(Uri imageUri){
+        fileUri = imageUri;
         imagePreview.setImageURI(imageUri);
         uploadButton.setEnabled(true);
         clickToChooseView.setVisibility(View.INVISIBLE);
