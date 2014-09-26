@@ -1,5 +1,6 @@
 package com.frontlinesms.jiraattachmentuploader;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
@@ -11,7 +12,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -24,7 +24,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class UploadActivity extends ActionBarActivity {
+public class UploadActivity extends Activity {
 
     private static int REQUEST_LOAD_IMAGE = 1;
     private Button uploadButton;
@@ -84,7 +84,7 @@ public class UploadActivity extends ActionBarActivity {
             uploadButton.setEnabled(true);
             TextView clickToChooseView = (TextView) findViewById(R.id.uploadTrigger);
             clickToChooseView.setVisibility(View.INVISIBLE);
-		} else if(requestCode = RESULT_SETTINGS) {
+		} else if(requestCode == RESULT_SETTINGS) {
 			Context context = getApplicationContext();
 			prefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
