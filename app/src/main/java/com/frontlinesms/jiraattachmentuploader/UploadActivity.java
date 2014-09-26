@@ -23,6 +23,17 @@ import android.widget.TextView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntity;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+
+import java.io.File;
+import java.io.IOException;
+
 
 public class UploadActivity extends Activity {
 
@@ -98,6 +109,28 @@ public class UploadActivity extends Activity {
 			Context context = getApplicationContext();
 			prefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
+    }
+
+    private HttpResponse uploadAttachment(Uri fileUri){
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("LINK TO SERVER");
+
+        MultipartEntity mpEntity = new MultipartEntity(HttpMultipartMode.BROWSER_COMPATIBLE);
+        if (filePath !=null) {
+            File file = new File(filePath);
+            Log.d("EDIT USER PROFILE", "UPLOAD: file length = " + file.length());
+            Log.d("EDIT USER PROFILE", "UPLOAD: file exist = " + file.exists());
+            mpEntity.addPart("avatar", new FileBody(file, "application/octet"));
+
+            httppost.setEntity(mpEntity);
+            try {
+                HttpResponse response = httpclient.execute(httppost);
+                return response;
+            }catch(IOException ex){
+                Log.e("UPLOAD_ERROR", ex.getMessage(), ex);
+            }
+        }
+        return null;
     }
 
     private void updateImagePreview(Uri imageUri){
