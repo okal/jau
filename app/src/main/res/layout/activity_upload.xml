@@ -47,9 +47,10 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="@string/select_an_image_to_upload"
-        android:id="@+id/upload_trigger"
+        android:id="@+id/uploadTrigger"
         android:layout_below="@+id/imagePreview"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="87dp" />
+        android:layout_marginTop="87dp"
+        android:clickable="true"/>
 
 </RelativeLayout>
