@@ -84,7 +84,7 @@ public class UploadActivity extends ActionBarActivity {
             uploadButton.setEnabled(true);
             TextView clickToChooseView = (TextView) findViewById(R.id.uploadTrigger);
             clickToChooseView.setVisibility(View.INVISIBLE);
-		} else if(requestCode = RESULT_SETTINGS) {
+		} else if(requestCode == RESULT_SETTINGS) {
 			Context context = getApplicationContext();
 			prefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
