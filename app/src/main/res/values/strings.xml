@@ -8,5 +8,15 @@
     <string name="comment">Comment (Optional)</string>
     <string name="upload_button_label">Upload To JIRA</string>
     <string name="select_an_image_to_upload">Choose an image to upload</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="url_label">Jira url</string>
+    <string name="url_hint">https://frontlinesms.jira.com</string>
+    <string name="username_label">Username</string>
+    <string name="password_label">Password</string>
+    <string name="username_hint">john_doe</string>
+    <string name="password_hint">password</string>
+    <string name="save">save</string>
+    <string name="cancel">cancel</string>
+    <string name="settings_header" />
 
 </resources>
