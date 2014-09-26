@@ -53,6 +53,19 @@ public class UploadActivity extends Activity {
             };
         });
 
+        // Get intent, action and MIME type
+        Intent intent = getIntent();
+        String action = intent.getAction();
+        String type = intent.getType();
+
+        if (Intent.ACTION_SEND.equals(action) && type != null) {
+            if (type.startsWith("image/")) {
+                Uri imageUri = (Uri) intent.getParcelableExtra(Intent.EXTRA_STREAM);
+                if (imageUri != null) {
+                    updateImagePreview(imageUri);
+                }
+            }
+        }
     }
 
 
@@ -78,15 +91,18 @@ public class UploadActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQUEST_LOAD_IMAGE && resultCode == RESULT_OK && data != null) {
-            Uri selectedImage = data.getData();
-
-            imagePreview.setImageURI(selectedImage);
-            uploadButton.setEnabled(true);
+            Uri imageUri = data.getData();
+            updateImagePreview(imageUri);
             TextView clickToChooseView = (TextView) findViewById(R.id.uploadTrigger);
-            clickToChooseView.setVisibility(View.INVISIBLE);
 		} else if(requestCode == RESULT_SETTINGS) {
 			Context context = getApplicationContext();
 			prefs = PreferenceManager.getDefaultSharedPreferences(context);
         }
+    }
+
+    private void updateImagePreview(Uri imageUri){
+        imagePreview.setImageURI(imageUri);
+        uploadButton.setEnabled(true);
+        clickToChooseView.setVisibility(View.INVISIBLE);
     }
 }
