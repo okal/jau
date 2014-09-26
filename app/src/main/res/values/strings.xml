@@ -7,5 +7,6 @@
     <string name="ticket_placeholder">Ticket number</string>
     <string name="comment">Comment (Optional)</string>
     <string name="upload_button_label">Upload To JIRA</string>
+    <string name="select_an_image_to_upload">Choose an image to upload</string>
 
 </resources>
