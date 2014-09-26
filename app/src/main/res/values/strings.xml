@@ -4,5 +4,7 @@
     <string name="app_name">JIRA Attachment Uploader</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="ticket_placeholder">Ticket number</string>
+    <string name="comment">Comment (Optional)</string>
 
 </resources>
